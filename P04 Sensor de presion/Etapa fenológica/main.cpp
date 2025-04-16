@@ -88,7 +88,14 @@ void calcularUnidadesCalor() {
 // Configuración inicial del sistema
 void setup() {
   SerialUSB.begin(115200);  // Iniciar comunicación serial
-  bme.begin();              // Inicializar sensor BME280
+  while(!SerialUSB);        // Inicializar sensor BME280
+
+  unsigned status;
+  status = bme.begin(BME280_ADDRESS_ALTERNATE);  
+
+  while(!status){
+    SerialUSB.println("No se encontró un sensor BME válido");
+  }   
   
   // Configurar pines de los LEDs como salida
   pinMode(ledEmergencia, OUTPUT);
@@ -97,7 +104,7 @@ void setup() {
   pinMode(ledVaina, OUTPUT);
   
   // Mensaje inicial
-  SerialUSB.println("Sistema de monitoreo fenologico del frijol con sensor DHT22");
+  SerialUSB.println("Sistema de monitoreo fenologico del frijol");
   SerialUSB.println("--------------------------------------------------------");
 }
 
